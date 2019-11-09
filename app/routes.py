@@ -14,7 +14,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import io
 import datetime as dt
-
+from pyramid.arima import auto_arima
 
 
 app = Flask(__name__)
@@ -122,7 +122,27 @@ def createdata(stock_name):
 
 @app.route('/pre/<stock_name>', methods=("POST", "GET"))
 def predata(stock_name):
-    pass
+    df = createDataStore(stock_name)
+    print(df)
+    df=df.dropna()
+
+    stepwise_model = auto_arima(df.Close, start_p=1, start_q=1,
+                                max_p=3, max_q=3, m=12,
+                                start_P=0, seasonal=True,
+                                d=1, D=1, trace=True,
+                                error_action='ignore',
+                                suppress_warnings=True,
+                                stepwise=True)
+    stepwise_model.fit(df)
+    future_forecast = stepwise_model.predict(n_periods=len(df.Close) + 365)
+    date = pd.date_range(start=dt.strptime(str(max(df.index)).split(" ")[0], "%Y-%m-%d").strftime("%d-%m-%Y"),
+                         end='09-11-2020', freq='D')
+    predection = future_forecast[len(df.Close) - 1:]
+    print(predection)
+    future_forecast = pd.DataFrame(predection, index=date, columns=['Prediction'])
+    df=future_forecast
+    print(future_forecast)
+    return render_template("Simple.html", column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
 if __name__ == '__main__':
   #app.run(debug=True) # Enable reloader and debugger
   app.run(host='0.0.0.0')
