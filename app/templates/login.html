@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% extends "layout.html" %} 
+<html>
+   <body>
+   
+   {% block content %}
+      <h3 style ="color:blue">Employee Login Page</h3>
+      <hr/>
+      
+      {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {%- endfor %}
+      
+ 
+   <form action="/login" method="POST">
+  <input type="username" name="username" placeholder="Username" style="float:right"><br> 
+  <br>  
+  <input type="password" name="password" placeholder="Password" style="float:right"><br>
+   <br>
+  <input type="submit" value="Log in" style="float:right">
+   
+  </form>
+  <form action="/forgetpasswd" method="POST">
+  	<input type="submit" value="Forget Password" style="float:right">
+  </form>
+     <img src="{{url_for('static', filename='image/DBS.png')}}" > 
+   </body>
+</html>
+{% endblock %}

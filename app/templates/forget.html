@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% extends "layout.html" %} 
+<html>
+   <body>
+   
+   {% block content %}
+      <h3 style ="color:blue">Employee Login Page</h3>
+      <hr/>
+      
+      {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {%- endfor %}
+      
+  
+   <form action="/forget" method="POST">
+   	 	<label for = "Emp_id">Your Emp ID</label><br>
+  		<input type="Emp_id" name="Emp_id" placeholder="" ><br>
+  		<br>
+ 
+  		<input type="submit" value="Submit" >
+  
+      
+   </body>
+</html>
+{% endblock %}

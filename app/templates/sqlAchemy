@@ -1,0 +1,34 @@
+steps:
+
+install flask
+install sqlalchemy
+(venv) C:\Users\anuragsh\Desktop\Python\Flask\Program_1\app>pip install sqlalchemy
+Collecting sqlalchemy
+  Downloading SQLAlchemy-1.2.5.tar.gz (5.6MB)
+    100% |████████████████████████████████| 5.6MB 65kB/s
+Building wheels for collected packages: sqlalchemy
+  Running setup.py bdist_wheel for sqlalchemy ... done
+  Stored in directory: C:\Users\anuragsh\AppData\Local\pip\Cache\wheels\61\22\7c\7f7a00946677df88d7072eb5c225108fc5c1e7e68b56a72689
+Successfully built sqlalchemy
+Installing collected packages: sqlalchemy
+Successfully installed sqlalchemy-1.2.5
+
+
+
+
+Queries:
+import sqlalchemy
+
+dbhost = 'localhost' #host name
+dbuser = 'root' #mysql username
+dbpass = 'admin' #mysql password
+dbname = 'mytable' #database name
+
+engine = sqlalchemy.create_engine('mysql://'+dbuser+':'+dbpass+'@'+dbhost ) # connect to server
+
+DB_URI = 'mysql://' + dbuser + ':' + dbpass + '@' + dbhost + '/' +dbname
+app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI']=DB_URI
+
+db = SQLAlchemy(app)

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+{% extends "layout.html" %} 
+ {% block content %}
+<html>
+   <body>
+   
+      <h3 style="color:Red">Employee - Sign up with Flask SQLAlchemy </h3>
+      <hr/>
+      
+      {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {%- endfor %}
+      
+      <form action = "{{ request.path }}" method = "post">
+         <label for = "name">Name</label><br>
+         <input type = "text" name = "name" placeholder = "" /><br>
+         
+         <label for = "division">Division</label><br>
+         <input type = "text" name = "division" placeholder = "" /><br>
+         
+         <label for = "Emp_id">Emp_id</label><br>
+         <input type = "text" name = "Emp_id" placeholder = ""><br>
+         
+         <label for = "Email">Email</label><br>
+         <input type = "text" name = "Email" placeholder = "" /><br>
+         <label for = "Password">Password</label><br>
+         <input type = "password" name = "Password" placeholder = "" /><br>
+         <input type = "submit" value = "Submit" />
+       
+      </form>
+      
+   </body>
+</html>
+{% endblock %}

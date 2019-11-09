@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="jumbo">
+    <h1 style="color:blue">Welcome to the voyager <h1>
+    <h3 style="color:green">This is the home page for the voyager<h3>
+    <img src="{{url_for('static', filename='image/Voyager.jpg')}}" >
+
+  </div>
+  
+</form>
+{% endblock %}
