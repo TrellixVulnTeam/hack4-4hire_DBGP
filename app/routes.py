@@ -1,5 +1,5 @@
 from flask import Flask, render_template #Need render_template() to render HTML pages
-from flask import Flask, request, flash, url_for, redirect, render_template, session
+from flask import Flask, request, flash, url_for, redirect, render_template, session, send_file
 from flask_sqlalchemy import SQLAlchemy
 import dataframe
 import numpy as np
@@ -9,6 +9,13 @@ import seaborn as sns
 sns.set(font='IPAGothic')
 import numpy as np
 import statsmodels.api as sm
+from flask import Flask, make_response
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+import io
+import datetime as dt
+
+
 
 app = Flask(__name__)
 
@@ -79,16 +86,43 @@ def createMainDashboard(stock_name):
     res = sm.tsa.seasonal_decompose(df.Close, freq=365)
     print(type(res))
     df_season = res.seasonal
+    #df = df_season.to_frame()
+    #df['Stock']=stock_name
+    #df=df[['Stock','Close']]
+    fig = res.plot()
+    fig.set_figheight(4)
+    fig.set_figwidth(8)
+
+    img = io.BytesIO()
+    fig.savefig(img)
+    img.seek(0)
+
+    return send_file(img,mimetype='image/png')
+
+    #return render_template("graph.html", name =plt.show())
+
+    #return render_template("Simple.html", column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
+
+
+@app.route('/data/<stock_name>', methods=("POST", "GET"))
+def createdata(stock_name):
+    df = createDataStore(stock_name)
+    print(df)
+    df=df.dropna()
+
+    res = sm.tsa.seasonal_decompose(df.Close, freq=365)
+
+    df_season = res.seasonal
     df = df_season.to_frame()
     df['Stock']=stock_name
-    # fig = res.plot()
-    # fig.set_figheight(8)
-    # fig.set_figwidth(15)
-    # plt.show()
+    df=df[['Stock','Close']]
 
-    #render_template('Simple.html',  tables=[df.head().to_html(header="true", table_id="table")], titles=df.columns.values)
+
     return render_template("Simple.html", column_names=df.columns.values, row_data=list(df.values.tolist()), zip=zip)
-    #return df.head().to_html(header="true", table_id="table")
 
+@app.route('/pre/<stock_name>', methods=("POST", "GET"))
+def predata(stock_name):
+    pass
 if __name__ == '__main__':
-  app.run(debug=True) # Enable reloader and debugger
+  #app.run(debug=True) # Enable reloader and debugger
+  app.run(host='0.0.0.0')
