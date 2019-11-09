@@ -125,4 +125,4 @@ def predata(stock_name):
     pass
 if __name__ == '__main__':
   #app.run(debug=True) # Enable reloader and debugger
-  app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0',port=50)
